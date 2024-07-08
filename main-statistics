@@ -1,0 +1,33 @@
+#include <iostream>
+#include <cstdio>
+#include "statistics.h"
+
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <input_file>" << std::endl;
+        return 1;
+    }
+
+    FILE* input_stream = fopen(argv[1], "r");
+    if (input_stream == nullptr) {
+        std::cerr << "Error opening file " << argv[1] << std::endl;
+        return 1;
+    }
+
+    try {
+        std::vector<double> values = statistics::read_values(input_stream, 100);
+        double mean = statistics::calculate_mean(values);
+        double std_deviation = statistics::calculate_std_deviation(values, mean);
+
+        std::cout << "Mean: " << mean << std::endl;
+        std::cout << "Standard Deviation: " << std_deviation << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+        fclose(input_stream);
+        return 1;
+    }
+
+    fclose(input_stream);
+    return 0;
+}
+
