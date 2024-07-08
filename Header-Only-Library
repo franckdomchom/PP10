@@ -1,0 +1,27 @@
+#ifndef GAUSSIAN_DIST_H
+#define GAUSSIAN_DIST_H
+
+#include <iostream>
+#include <random>
+#include <cstdio>
+
+namespace gaussian_dist {
+
+    void print_gaussian_dist(int expected_value, int std_deviation, int amount_of_values, FILE* output_stream) {
+        if (amount_of_values < 100) {
+            amount_of_values = 100;
+        }
+
+        std::default_random_engine generator;
+        std::normal_distribution<double> distribution(expected_value, std_deviation);
+
+        for (int i = 0; i < amount_of_values; ++i) {
+            double value = distribution(generator);
+            fprintf(output_stream, "%f\n", value);
+        }
+    }
+
+} // namespace gaussian_dist
+
+#endif // GAUSSIAN_DIST_H
+
