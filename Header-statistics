@@ -1,0 +1,40 @@
+#include "statistics.h"
+#include <cmath>
+#include <stdexcept>
+
+namespace statistics {
+
+    std::vector<double> read_values(FILE* input_stream, int num_values) {
+        std::vector<double> values;
+        double value;
+        int count = 0;
+
+        while (count < num_values && fscanf(input_stream, "%lf", &value) == 1) {
+            values.push_back(value);
+            count++;
+        }
+
+        if (count < num_values) {
+            throw std::runtime_error("Not enough values in the input stream");
+        }
+
+        return values;
+    }
+
+    double calculate_mean(const std::vector<double>& values) {
+        double sum = 0;
+        for (double value : values) {
+            sum += value;
+        }
+        return sum / values.size();
+    }
+
+    double calculate_std_deviation(const std::vector<double>& values, double mean) {
+        double sum = 0;
+        for (double value : values) {
+            sum += (value - mean) * (value - mean);
+        }
+        return std::sqrt(sum / values.size());
+    }
+}
+
