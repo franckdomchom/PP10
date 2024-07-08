@@ -1,0 +1,64 @@
+#include <cstdio>
+#include <cstdlib>
+#include <unistd.h>
+#include <iostream>
+#include "gaussian_dist.h"
+
+void print_usage() {
+    std::cout << "Usage: gaussian_dist -e expected_value -s std_deviation -a amount_of_values -o output_file\n"
+              << "Options:\n"
+              << "  -e    Set the expected value (mean) of the distribution\n"
+              << "  -s    Set the standard deviation of the distribution\n"
+              << "  -a    Set the amount of values to generate (minimum 100)\n"
+              << "  -o    Set the output file to write the values\n"
+              << "  -h    Show this help message\n";
+}
+
+int main(int argc, char *argv[]) {
+    int expected_value = 0;
+    int std_deviation = 1;
+    int amount_of_values = 100;
+    char *output_file = nullptr;
+
+    int opt;
+    while ((opt = getopt(argc, argv, "e:s:a:o:h")) != -1) {
+        switch (opt) {
+            case 'e':
+                expected_value = std::atoi(optarg);
+                break;
+            case 's':
+                std_deviation = std::atoi(optarg);
+                break;
+            case 'a':
+                amount_of_values = std::atoi(optarg);
+                break;
+            case 'o':
+                output_file = optarg;
+                break;
+            case 'h':
+                print_usage();
+                return 0;
+            default:
+                print_usage();
+                return 1;
+        }
+    }
+
+    if (output_file == nullptr) {
+        std::cerr << "Output file is required\n";
+        print_usage();
+        return 1;
+    }
+
+    FILE *output_stream = fopen(output_file, "w");
+    if (output_stream == nullptr) {
+        std::cerr << "Error opening file " << output_file << "\n";
+        return 1;
+    }
+
+    gaussian_dist::print_gaussian_dist(expected_value, std_deviation, amount_of_values, output_stream);
+
+    fclose(output_stream);
+    return 0;
+}
+
