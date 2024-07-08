@@ -1,0 +1,20 @@
+#include <cstdio>
+#include "gaussian_dist.h"
+
+int main() {
+    FILE* output_stream = fopen("output.txt", "w");
+    if (output_stream == nullptr) {
+        std::cerr << "Fehler beim Öffnen der Datei!" << std::endl;
+        return 1;
+    }
+
+    int expected_value = 0;
+    int std_deviation = 1;
+    int amount_of_values = 100;
+
+    gaussian_dist::print_gaussian_dist(expected_value, std_deviation, amount_of_values, output_stream);
+
+    fclose(output_stream);
+    return 0;
+}
+
